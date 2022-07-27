@@ -1,38 +1,137 @@
-.App {
-  text-align: center;
+:root {
+  --textColor: rgb(65, 64, 66);
+  --btnbgColor: #3287b7;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html {
+  scroll-behavior: smooth;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 1em;
+  font-family: "Neutrif Pro";
+  background-color: #f2f0e4;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* ---------------Login--------------- */
+.phone-container {
+  padding: 3em 1.7em;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 100vh;
+  background-color: #f2f0e4;
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+.phone-container h1 {
+  font-size: 1.3em;
+  font-weight: 500;
+  font-style: normal;
+  margin-bottom: 0;
+  color: var(--textColor);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.phone-container p {
+  font-size: 0.755em;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0;
+  width: 100%;
+  max-width: 270px;
+  text-align: center;
+  justify-content: space-evenly
+}
+
+.phone-container p span {
+  font-weight: 500;
+}
+.forgot-font{
+  font-size: 17px!important;
+  font-weight: 700!important;
+}
+
+/* *********************Home**************************** */
+.nav-wrap{
+  display: flex;
+  background-color: rgb(77, 77, 77);
+  width: 240px;
+  height: 90vh;
+  justify-content: space-evenly;
+}
+.main-nav{
+  display: flex;
+  justify-content:space-evenly;
+}
+.sidebar-li{
+  text-decoration: none;
+  list-style: none;
+  list-style-type: none;
+  font-size: 20px;
+  margin-top: 20px;
+  color: bisque;
+  border: 1px solid white;
+  padding: 2px 30px;
+  border-radius: 10px;
+}
+/* .sidebar-li:hover{
+  transform: scale(1.1);
+} */
+.sidebar-ul{
+  padding-left: 0px;
+}
+.home-page{
+  height: 100vh;
+}
+.navbar-style{
+  padding: 20px 0px;
+}
+.shop-card{
+  justify-content: space-evenly;
+  margin: 0px 40px!important;
+
+}
+.shop-img{
+  width: 373px;
+  height:450px;
+  border-radius: 40px;
+  margin-top: 40px;
+  position: relative;
+  border-bottom: 1px solid blue;
+}
+.sale-img{
+  position: absolute;
+  width: 289px;
+  padding-left: 20px;
+  
+}
+@media only screen and (min-device-width: 280px) and (max-device-width: 1024px) {
+  .shop-img{
+    width: 300px;
+    height: 300px;
   }
-  to {
-    transform: rotate(360deg);
-  }
+}
+.shoe-img{
+  margin-top: 40px!important;
+}
+.product-img:hover{
+  transform: scale(1.1);
+}
+.card{
+  border-radius: 20px!important;
+  background-color: rgba(255, 255, 255, 0.1)!important;
+}
+.cart-img{
+  width: 100px;
+  height: 100px;
+}
+.list-style{
+  width:600px
+}
+.cartlist-container{
+  overflow-y: scroll;
+  height: 60vh;
 }
