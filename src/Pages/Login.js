@@ -29,7 +29,26 @@ function Login() {
     }
     if (data.data.response.message === "Login Successfully") {
       toast.success(data.data.response.message, toastOptions);
-      navigate("/home");
+      window.localStorage.setItem("myapptoken", data.data.response.authToken);
+      window.localStorage.setItem("id", data.data.response.id);
+      let storageData = JSON.parse(localStorage.getItem("cartList"));
+      if (!storageData) {
+        navigate("/");
+      } else {
+        for (var i = 0; i < storageData.length; i++) {
+          if (localStorage.getItem("myapptoken")) {
+            axios.post("http://localhost:2022/newCart", storageData[i], {
+              headers: {
+                Authorization: window.localStorage.getItem("myapptoken"),
+              },
+            });
+            navigate("/cart");
+            localStorage.removeItem("cartList");
+          } else {
+            navigate("/");
+          }
+        }
+      }
     }
   };
   const handleChange = (e) => {

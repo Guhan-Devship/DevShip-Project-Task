@@ -97,7 +97,7 @@ function Register() {
           />
         </form>
         <span>
-          Already have account? <Link to={"/"}>Login</Link>
+          Already have account? <Link to={"/login"}>Login</Link>
         </span>
         <Toaster />
       </div>
