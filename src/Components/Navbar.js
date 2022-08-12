@@ -18,7 +18,7 @@ function Navbar() {
         <Link to={"/cart"}>
           <button class="btn btn-outline-primary" type="submit">
             <i class="bi-cart-fill me-1"></i>
-            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            {/* <i class="fa fa-shopping-cart" aria-hidden="true"></i> */}
             Cart
             <span class="badge bg-primary text-white ms-1 rounded-pill"></span>
           </button>
