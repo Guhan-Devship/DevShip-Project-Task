@@ -46,7 +46,7 @@ function Checkout({ setOpen, cart, total }) {
     for (let i = 0; i < cart.length; i++) {
       const data = await axios.post(
         "http://localhost:2022/new/order",
-        Object.assign(cart[i], address),
+        cart[i],
         {
           headers: {
             Authorization: window.localStorage.getItem("myapptoken"),

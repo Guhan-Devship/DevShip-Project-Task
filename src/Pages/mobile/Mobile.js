@@ -8,6 +8,7 @@ import Pagination from "react-js-pagination";
 
 function Mobile() {
   let params = useParams();
+
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -15,6 +16,7 @@ function Mobile() {
     draggable: true,
     theme: "dark",
   };
+
   const [product, setProduct] = useState([]);
   const [cartitems, setCartItems] = useState([]);
   const [activepage, setActivePage] = useState(1);
@@ -23,7 +25,7 @@ function Mobile() {
   const [aggreagte, setAggregate] = useState({
     search: "",
     filterPrice: 0,
-    field: false,
+    field: "",
     limit: 4,
     skip: 0,
     category: params.id,
@@ -54,8 +56,9 @@ function Mobile() {
         ...state,
         [id]: value,
       }));
-    }, 2000);
+    }, 3000);
   };
+
   // const handleChangeInput = (e) => {
   //   e.preventDefault();
   //   const id = e.target.id;
@@ -67,11 +70,13 @@ function Mobile() {
   //     }));
   //   }, 2000);
   // };
+
   let handleCart = (item) => {
     setCartItems([...cartitems, item]);
     localStorage.setItem("cartList", JSON.stringify(cartitems));
     toast.success("Added", toastOptions);
   };
+
   useEffect(() => {
     let cartlist = localStorage.getItem("cartList");
     if (cartlist) {
