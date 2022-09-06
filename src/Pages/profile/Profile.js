@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import Navbar from "../../Components/Navbar";
+import request from "../../api/api";
 
 function Profile() {
   let navigate = useNavigate();
@@ -33,15 +34,14 @@ function Profile() {
   let handleAddress = async (id) => {
     setAddressDefault({ billingAddress: true });
     if (addressDefault.billingAddress === true) {
-      await axios.put(
-        `http://localhost:2022/updateBillingAddress/${id}`,
-        addressDefault,
-        {
-          headers: {
-            Authorization: window.localStorage.getItem("myapptoken"),
-          },
-        }
-      );
+      request({
+        url: `updateBillingAddress/${id}`,
+        method: "PUT",
+        data: addressDefault,
+        headers: {
+          Authorization: window.localStorage.getItem("myapptoken"),
+        },
+      });
     }
     window.location.reload(false);
   };
@@ -239,7 +239,6 @@ function Profile() {
     <>
       <Navbar />
       <div className="container">
-        <div className="mt-5">guhan</div>
         <div className="row mt-5">
           <div class="row gutters">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">

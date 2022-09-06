@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import request from "../api/api";
 import Otp from "./Otp";
 
 function ForgotPassword() {
@@ -30,23 +31,21 @@ function ForgotPassword() {
     e.preventDefault();
     if (handleValidation()) {
       const { email } = value;
-      const data = await axios.post(
-        "http://localhost:2022/forgot/password",
-        {
-          email,
+      request({
+        url: `forgot/password`,
+        method: "POST",
+        data: value,
+        headers: {
+          Authorization: window.localStorage.getItem("myapptoken"),
         },
-        {
-          headers: {
-            Authorization: window.localStorage.getItem("myapptoken"),
-          },
+      }).then((res) => {
+        if (res.status !== 1) {
+          toast.error(res.response, toastOptions);
         }
-      );
-      if (data.data.status !== 1) {
-        toast.error(data.data.response, toastOptions);
-      }
-      if (data.data.status === 1) {
-        toast.success(data.data.response, toastOptions);
-      }
+        if (res.status === 1) {
+          toast.success(res.response, toastOptions);
+        }
+      });
       setOpenModal(true);
     }
   };

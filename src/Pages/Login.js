@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import request from "../api/api";
 
 function Login() {
   const navigate = useNavigate();
@@ -19,37 +20,58 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { password, email } = value;
-    const data = await axios.post("http://localhost:2022/login", {
-      email,
-      password,
-    });
-    console.log(data.data.response);
-    if (data.data.response.message !== "Login Successfully") {
-      toast.error(data.data.response.message, toastOptions);
-    }
-    if (data.data.response.message === "Login Successfully") {
-      toast.success(data.data.response.message, toastOptions);
-      window.localStorage.setItem("myapptoken", data.data.response.authToken);
-      window.localStorage.setItem("id", data.data.response.id);
-      let storageData = JSON.parse(localStorage.getItem("cartList"));
-      if (!storageData) {
-        navigate("/");
-      } else {
-        for (var i = 0; i < storageData.length; i++) {
-          if (localStorage.getItem("myapptoken")) {
-            axios.post("http://localhost:2022/newCart", storageData[i], {
-              headers: {
-                Authorization: window.localStorage.getItem("myapptoken"),
-              },
-            });
-            navigate("/cart");
-            localStorage.removeItem("cartList");
-          } else {
-            navigate("/");
+    // const data = await axios.post("http://localhost:2022/login", {
+    //   email,
+    //   password,
+    // });
+    // console.log(data.data.response);
+    request({
+      url: `login`,
+      method: "POST",
+      data: value,
+    }).then((res) => {
+      if (res.response.message !== "Login Successfully") {
+        toast.error(res.response.message, toastOptions);
+      }
+      if (res.response.message === "Login Successfully") {
+        toast.success(res.response.message, toastOptions);
+        window.localStorage.setItem("myapptoken", res.response.authToken);
+        window.localStorage.setItem("id", res.response.id);
+        let storageData = JSON.parse(localStorage.getItem("cartList"));
+        if (!storageData) {
+          navigate("/");
+        } else {
+          for (var i = 0; i < storageData.length; i++) {
+            if (localStorage.getItem("myapptoken")) {
+              request({
+                url: "newCart",
+                method: "POST",
+                data: storageData[i],
+                headers: {
+                  Authorization: window.localStorage.getItem("myapptoken"),
+                },
+              }).then((res) => {
+                if (res) {
+                  navigate("/cart");
+                  localStorage.removeItem("cartList");
+                } else {
+                  navigate("/");
+                }
+              });
+              //   axios.post("http://localhost:2022/newCart", storageData[i], {
+              //     headers: {
+              //       Authorization: window.localStorage.getItem("myapptoken"),
+              //     },
+              //   });
+              //   navigate("/cart");
+              //   localStorage.removeItem("cartList");
+              // } else {
+              //   navigate("/");
+            }
           }
         }
       }
-    }
+    });
   };
   const handleChange = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });

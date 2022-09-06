@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import request from "../../api/api";
 
 function MobileCard(props) {
   const toastOptions = {
@@ -13,22 +14,21 @@ function MobileCard(props) {
 
   const handleSubmit = async () => {
     if (() => props.handleCart()) {
-      const data = await axios.post(
-        "http://localhost:2022/newCart",
-        props.productData,
-        {
-          headers: {
-            Authorization: window.localStorage.getItem("myapptoken"),
-          },
+      request({
+        url: `newCart`,
+        method: "POST",
+        data: props.productData,
+        headers: {
+          Authorization: window.localStorage.getItem("myapptoken"),
+        },
+      }).then((res) => {
+        if (res.message !== "cartList Created") {
+          toast.error(res.message, toastOptions);
         }
-      );
-      console.log(data);
-      if (data.data.message !== "added to cart") {
-        toast.error(data.data.message, toastOptions);
-      }
-      if (data.data.message === "added to cart") {
-        toast.success("Added to cart", toastOptions);
-      }
+        if (res.message === "cartList Created") {
+          toast.success("Added to cart", toastOptions);
+        }
+      });
     }
   };
   return (

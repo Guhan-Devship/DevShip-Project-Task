@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
+import request from "../../api/api";
 
 function Checkout({ setOpen, cart, total }) {
   let address = JSON.parse(localStorage.getItem("address"));
@@ -28,37 +29,37 @@ function Checkout({ setOpen, cart, total }) {
     fetchData();
   });
   useEffect(() => {
-    axios
-      .get(`http://localhost:2022/billingaddress/${userId}`, {
-        headers: {
-          Authorization: window.localStorage.getItem("myapptoken"),
-        },
-      })
-      .then((res) => {
-        if (res.data.length === 0) {
-          navigate("/profile");
-        }
-        setBillAddress(res.data);
-      });
+    request({
+      url: `billingaddress/${userId}`,
+      method: "GET",
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      if (res.length === 0) {
+        navigate("/profile");
+      }
+      setBillAddress(res);
+    });
   }, []);
 
   const handleSubmit = async () => {
     for (let i = 0; i < cart.length; i++) {
-      const data = await axios.post(
-        "http://localhost:2022/new/order",
-        cart[i],
-        {
-          headers: {
-            Authorization: window.localStorage.getItem("myapptoken"),
-          },
+      request({
+        url: `new/order`,
+        method: "POST",
+        data: cart[i],
+        headers: {
+          Authorization: window.localStorage.getItem("myapptoken"),
+        },
+      }).then((res) => {
+        if (res.message !== "order Created") {
+          toast.error(res.message, toastOptions);
         }
-      );
-      if (data.data.message !== "ordered") {
-        toast.error(data.data.message, toastOptions);
-      }
-      if (data.data.message === "ordered") {
-        toast.success(data.data.message, toastOptions);
-      }
+        if (res.message === "order Created") {
+          toast.success(res.message, toastOptions);
+        }
+      });
     }
   };
   return (

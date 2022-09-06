@@ -10,6 +10,7 @@ import ChangePassword from "./Pages/ChangePassword";
 import Mobile from "./Pages/mobile/Mobile";
 import Cart from "./Pages/cart/Cart";
 import Profile from "./Pages/profile/Profile";
+import Practice from "./Components/Practice";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/view/:id" element={<Mobile />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/practice" element={<Practice />} />
       </Routes>
     </BrowserRouter>
   );

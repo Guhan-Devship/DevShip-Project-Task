@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import request from "../api/api";
 
 function Register() {
   const navigate = useNavigate();
@@ -22,23 +23,23 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { password, confirmPassword, first_name, surname, email } = value;
-    const data = await axios.post("http://localhost:2022/register", {
-      first_name,
-      surname,
-      email,
-      password,
-      confirmPassword,
+    request({
+      url: `register`,
+      method: "POST",
+      data: value,
+    }).then((res) => {
+      console.log(res);
+      if (res.message === "Email already exists") {
+        toast.error(res.data.message, toastOptions);
+      }
+      if (res.message === "Password not match") {
+        toast.error(res.data.message, toastOptions);
+      }
+      if (res.message === "User Created") {
+        toast.success("SuccessFully Created", toastOptions);
+        navigate("/login");
+      }
     });
-    if (data.data.message === "Email already exists") {
-      toast.error(data.data.message, toastOptions);
-    }
-    if (data.data.message === "Password not match") {
-      toast.error(data.data.message, toastOptions);
-    }
-    if (data.data.message === "User Created") {
-      toast.success("SuccessFully Created", toastOptions);
-      navigate("/");
-    }
   };
   const handleChange = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });

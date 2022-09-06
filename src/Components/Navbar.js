@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import request from "../api/api";
 
 function Navbar() {
   let navigate = useNavigate();
-  let users = window.localStorage.getItem("myapptoken");
+  let userId = localStorage.getItem("id");
+  console.log(userId);
   let handleLogout = () => {
     window.localStorage.removeItem("myapptoken");
     window.localStorage.clear();
     navigate("/");
   };
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const getAPI = () => {
+    setLoading(true);
+    request({
+      url: `getUser/${userId}`,
+      method: "GET",
+      data: data,
+    }).then((res) => {
+      setLoading(false);
+      setData(res);
+    });
+  };
+  useEffect(() => {
+    if (userId) {
+      getAPI();
+    }
+  }, []);
   return (
     <>
       <nav id="navbar-example2" class="navbar navbar-light bg-dark">
@@ -47,7 +67,7 @@ function Navbar() {
             </div>
           </li>
         </ul>
-        {users ? (
+        {userId ? (
           <>
             <ul class="nav nav-pills">
               <li class="nav-item dropdown">
@@ -60,11 +80,12 @@ function Navbar() {
                   aria-expanded="false"
                 >
                   <i class="fa fa-user" aria-hidden="true"></i>
-                  user
+                  {data.first_name}
+                  {console.log(data)}
                 </a>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item">user</a>
-                  <a class="dropdown-item">mobile</a>
+                  <a class="dropdown-item">{data.first_name}</a>
+                  <a class="dropdown-item">{data.phone}</a>
                   <Link to={"/profile"}>
                     <button className="btn-sm btn-primary mx-4">
                       <i class="fa fa-pencil" aria-hidden="true">

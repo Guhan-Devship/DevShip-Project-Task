@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import request from "../api/api";
 import Navbar from "../Components/Navbar";
 import sale from "../images/sale.png";
 import shopping from "../images/shopping.png";
@@ -11,8 +12,12 @@ function Home() {
 
   const [category, setCategory] = useState([]);
   let getdata = async () => {
-    const { data } = await axios.get("http://localhost:2022/getCategory");
-    setCategory(data);
+    request({
+      url: `getCategory`,
+      method: "GET",
+    }).then((res) => {
+      setCategory(res);
+    });
   };
 
   useEffect(() => {

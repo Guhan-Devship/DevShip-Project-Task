@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../Components/Navbar";
 import Checkout from "./Checkout";
 import CartList from "./CartList";
+import request from "../../api/api";
 
 function Cart() {
   let navigate = useNavigate();
@@ -19,12 +20,15 @@ function Cart() {
 
   //cart List from BackEnd
   let getdata = async () => {
-    const { data } = await axios.get("http://localhost:2022/allCart", {
+    request({
+      url: `allCart`,
+      method: "GET",
       headers: {
         Authorization: window.localStorage.getItem("myapptoken"),
       },
+    }).then((res) => {
+      setCart(res);
     });
-    setCart(data);
   };
   //local storage of add cart before Login
   let storageData = () => {

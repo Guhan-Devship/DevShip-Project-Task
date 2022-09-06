@@ -5,6 +5,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import MobileCard from "./MobileCard";
 import Pagination from "react-js-pagination";
+import request from "../../api/api";
 
 function Mobile() {
   let params = useParams();
@@ -85,12 +86,17 @@ function Mobile() {
   }, []);
 
   let aggregateApi = async () => {
-    const { data } = await axios.post(
-      "http://localhost:2022/products",
-      aggreagte
-    );
-    setProduct(data.response.result);
-    setPages(data.response.fullcount);
+    request({
+      url: `products`,
+      method: "POST",
+      data: aggreagte,
+      headers: {
+        Authorization: window.localStorage.getItem("myapptoken"),
+      },
+    }).then((res) => {
+      setProduct(res.response.result);
+      setPages(res.response.fullcount);
+    });
   };
   useEffect(() => {
     aggregateApi();

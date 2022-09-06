@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import request from "../api/api";
 
 function Otp({ setOpen }) {
   let navigate = useNavigate();
@@ -34,25 +35,39 @@ function Otp({ setOpen }) {
     e.preventDefault();
     if (handleValidation()) {
       const { email, otp } = value;
-      const data = await axios.post(
-        "http://localhost:2022/verify/otp",
-        {
-          email,
-          otp,
-        },
-        {
-          headers: {
-            Authorization: window.localStorage.getItem("myapptoken"),
-          },
+      request({
+        url: `verify/otp`,
+        method: "POST",
+        data: value,
+        headers: { Authorization: window.localStorage.getItem("myapptoken") },
+      }).then((res) => {
+        if (res.status !== 1) {
+          toast.error(res.response, toastOptions);
         }
-      );
-      if (data.data.status !== 1) {
-        toast.error(data.data.response, toastOptions);
-      }
-      if (data.data.status === 1) {
-        toast.success(data.data.response, toastOptions);
-        navigate("/changePassword");
-      }
+        if (res.status === 1) {
+          toast.success(res.response, toastOptions);
+          navigate("/changePassword");
+        }
+      });
+      // const data = await axios.post(
+      //   "http://localhost:2022/verify/otp",
+      //   {
+      //     email,
+      //     otp,
+      //   },
+      //   {
+      //     headers: {
+      //       Authorization: window.localStorage.getItem("myapptoken"),
+      //     },
+      //   }
+      // );
+      // if (data.data.status !== 1) {
+      //   toast.error(data.data.response, toastOptions);
+      // }
+      // if (data.data.status === 1) {
+      //   toast.success(data.data.response, toastOptions);
+      //   navigate("/changePassword");
+      // }
     }
   };
   return (

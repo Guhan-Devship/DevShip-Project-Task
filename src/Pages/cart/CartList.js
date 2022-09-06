@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import request from "../../api/api";
 
 function CartList(props) {
   let navigate = useNavigate();
@@ -25,13 +26,16 @@ function CartList(props) {
         "Are you sure, do you want to remove this Cart?"
       );
       if (ask) {
-        await axios.delete(`http://localhost:2022/deleteCart/${id}`, {
+        request({
+          url: `deleteCart/${id}`,
+          method: "DELETE",
           headers: {
             Authorization: window.localStorage.getItem("myapptoken"),
           },
+        }).then((res) => {
+          toast.success("Removed", toastOptions);
+          props.getdata();
         });
-        toast.success("Removed", toastOptions);
-        props.getdata();
       }
     } catch (error) {
       console.log("Something went wrong");

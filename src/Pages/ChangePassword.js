@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import request from "../api/api";
 
 function ChangePassword() {
   let navigate = useNavigate();
@@ -34,25 +35,22 @@ function ChangePassword() {
     e.preventDefault();
     if (handleValidation()) {
       const { email, password } = value;
-      const data = await axios.post(
-        "http://localhost:2022/change/password",
-        {
-          email,
-          password,
+      request({
+        url: `change/password`,
+        method: "POST",
+        data: value,
+        headers: {
+          Authorization: window.localStorage.getItem("myapptoken"),
         },
-        {
-          headers: {
-            Authorization: window.localStorage.getItem("myapptoken"),
-          },
+      }).then((res) => {
+        if (res.status !== 1) {
+          toast.error(res.response, toastOptions);
         }
-      );
-      if (data.data.status !== 1) {
-        toast.error(data.data.response, toastOptions);
-      }
-      if (data.data.status === 1) {
-        toast.success(data.data.response, toastOptions);
-        navigate("/");
-      }
+        if (res.status === 1) {
+          toast.success(res.response, toastOptions);
+          navigate("/");
+        }
+      });
     }
   };
   return (
